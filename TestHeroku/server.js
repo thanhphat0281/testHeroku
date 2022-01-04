@@ -1,22 +1,9 @@
-const path = require('path');
-const favicon = require('serve-favicon');
+const path = require("path");
+const express = require("express");
 const app = express();
-const forceSSL = function () {
-  return function (req, res, next) {
-    if (req.headers['x-forwarded-proto'] !== 'https') {
-      return res.redirect(
-        ['https://', req.get('Host'), req.url].join('')
-      );
-    }
-    next();
-  }
-};
-app.use(express.static('./dist/testHeroku'));
- 
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname,'/dist/testHeroku/index.html'));
+app.use(express.static(__dirname + '/angular-build'));
+app.get('/*', function(req,res){
+res.sendFile(path.join(__dirname, 'angular-build', 'index.html'))
 });
- 
-app.use(forceSSL());
- 
+// Start the app by listening on the default Heroku port
 app.listen(process.env.PORT || 8080);
